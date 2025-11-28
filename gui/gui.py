@@ -53,7 +53,7 @@ class GUI:
                         color,
                         (
                             int(c * self.square + self.square / 2),
-                            self.height - int(r * self.square + self.square / 2),
+                            int(r * self.square + self.square + self.square / 2),
                         ),
                         int(self.square / 2 - 8),
                     )
@@ -86,19 +86,22 @@ class GUI:
                         col = posx // self.square
 
                         result = game.make_player_move(col)
+                        # draw immediately so the player's piece is visible
+                        self.draw_board()
                         if result == "player_win":
                             label = self.font.render("You Win!", True, WHITE)
                             self.screen.blit(label, (40, 10))
                             pygame.display.update()
                             pygame.time.wait(3000)
                             game.reset()
-
-                        self.draw_board()
+                            self.draw_board()
 
             # AI MOVE
             if game.turn == AI and not game.game_over:
                 pygame.time.wait(300)
                 result = game.make_ai_move()
+                # draw immediately so the AI's piece is visible before any win handling
+                self.draw_board()
 
                 if result == "ai_win":
                     label = self.font.render("AI Wins!", True, WHITE)
@@ -106,7 +109,6 @@ class GUI:
                     pygame.display.update()
                     pygame.time.wait(3000)
                     game.reset()
-
-                self.draw_board()
+                    self.draw_board()
 
         pygame.quit()
